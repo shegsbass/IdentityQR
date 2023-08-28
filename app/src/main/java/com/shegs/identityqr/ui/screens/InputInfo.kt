@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
+import com.shegs.identityqr.util.generateQRCode
 import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -129,20 +130,6 @@ fun InputInfoScreen(
             Button(
                 onClick = {
 
-                    val userInfo = InformationEvents.UserInput(
-                        cardName = cardName.text,
-                        firstName = firstName.text,
-                        lastName = lastName.text,
-                        emailAddress = emailAddress.text,
-                        homeAddress = homeAddress.text,
-                        phoneNumber = phoneNumber.text,
-                        instagramHandle = instagramHandle.text,
-                        twitterHandle = twitterHandle.text,
-                        bio = bio.text,
-                        qrCodeImageBitmap = null, // Set this to the actual Bitmap if you have it
-                        createdAt = Date()
-                    )
-
                     val qrText = buildString {
                         append("First Name: ${firstName.text}\n")
                         append("Last Name: ${lastName.text}\n")
@@ -153,6 +140,22 @@ fun InputInfoScreen(
                         append("Twitter Handle: ${twitterHandle.text}\n")
                         append("Bio: ${bio.text}")
                     }
+
+                    val qrBitmap = generateQRCode(qrText, 300) // Generate QR code as Bitmap
+                    val userInfo = InformationEvents.UserInput(
+                        cardName = cardName.text,
+                        firstName = firstName.text,
+                        lastName = lastName.text,
+                        emailAddress = emailAddress.text,
+                        homeAddress = homeAddress.text,
+                        phoneNumber = phoneNumber.text,
+                        instagramHandle = instagramHandle.text,
+                        twitterHandle = twitterHandle.text,
+                        bio = bio.text,
+                        qrCodeImageBitmap = qrBitmap, //Pass the QR code Bitmap
+                        createdAt = Date()
+                    )
+
                     Log.d("QRCode", "QR Text to Generate: $qrText")
                     onGenerateQRCode(qrText)
                     viewModel.onEvent(InformationEvents.SaveUserInput(userInfo))

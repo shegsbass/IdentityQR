@@ -77,11 +77,6 @@ class InformationViewModel @Inject constructor(
             is InformationEvents.SaveUserInput -> {
                 val userInput = event.userInput
 
-                // Convert Bitmap to ByteArray
-                val outputStream = ByteArrayOutputStream()
-                userInput.qrCodeImageBitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                val qrCodeImage = outputStream.toByteArray()
-
                 viewModelScope.launch(Dispatchers.IO) {
                     validateCardNameField()
                     val information = Information(
@@ -94,7 +89,7 @@ class InformationViewModel @Inject constructor(
                         instagramHandle = userInput.instagramHandle,
                         twitterHandle = userInput.twitterHandle,
                         bio = userInput.bio,
-                        qrCodeImage = qrCodeImage,
+                        qrCodeImage = bitmapToByteArray(userInput.qrCodeImageBitmap),
                         createdAt = LocalDateTime.now()
                     )
                     informationRepository.insertInformation(information)
@@ -136,6 +131,13 @@ class InformationViewModel @Inject constructor(
                 _infoState.update { it.copy(isAddingInformation = false) }
             }
         }
+    }
+
+    // Function to convert Bitmap to ByteArray
+    private fun bitmapToByteArray(bitmap: Bitmap?): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return outputStream.toByteArray()
     }
 
 }
