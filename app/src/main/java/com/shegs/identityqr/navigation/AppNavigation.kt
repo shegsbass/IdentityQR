@@ -12,6 +12,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.shegs.identityqr.navigation.bottomnav.BottomNavItem
 import com.shegs.identityqr.ui.screens.DashboardScreen
 import com.shegs.identityqr.ui.screens.DisplayInfoScreen
 import com.shegs.identityqr.ui.screens.InputInfoScreen
@@ -24,12 +25,17 @@ import com.shegs.identityqr.util.generateQRCode
 fun AppNavigation(navController: NavHostController) {
     val viewModel: InformationViewModel = hiltViewModel()
 
-    NavHost(navController = navController, startDestination = "dashboard"){
-        composable("dashboard"){
+//    NavHost(navController = navController, startDestination = "dashboard"){
+//        composable("dashboard"){
+//            DashboardScreen(viewModel = viewModel, navController = navController)
+//        }
+
+    NavHost(navController = navController, startDestination = BottomNavItem.History.screenRoute){
+        composable(BottomNavItem.History.screenRoute){
             DashboardScreen(viewModel = viewModel, navController = navController)
         }
 
-        composable("addInfo"){
+        composable(BottomNavItem.Create.screenRoute){
             InputInfoScreen(viewModel = viewModel, navController = navController, onGenerateQRCode = { qrText ->
                 val qrText = generateQRCode(qrText)
                 navController.navigate("qrCodeDisplay/$qrText")
