@@ -1,5 +1,6 @@
 package com.shegs.identityqr.ui.screens
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -14,15 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,36 +28,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
 import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen(viewModel: InformationViewModel, navController: NavController) {
-    val cardState = viewModel.infoState.collectAsState().value
+fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostController) {
+    val cards = viewModel.getAllInformation.collectAsState(initial = emptyList()).value
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                viewModel.viewModelScope.launch {
-                    navController.navigate("addInfo")
-                }
-
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add Card"
-                )
-            }
-        },
-
-        content = {_ ->
-            cardState.isAddingInformation
-            val cards = viewModel.getAllInformation.collectAsState(initial = emptyList()).value
-
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier
@@ -95,8 +79,14 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavControlle
                                 horizontalArrangement = Arrangement.End
                             ) {
                                 IconButton(
-                                    onClick = { viewModel.viewModelScope.launch {
-                                        viewModel.onEvent(InformationEvents.DeleteInformation(card)) }
+                                    onClick = {
+                                        viewModel.viewModelScope.launch {
+                                            viewModel.onEvent(
+                                                InformationEvents.DeleteInformation(
+                                                    card
+                                                )
+                                            )
+                                        }
                                     }
 
                                 ) {
@@ -111,6 +101,7 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavControlle
                     }
                 }
             }
+
         }
-    )
+
 }

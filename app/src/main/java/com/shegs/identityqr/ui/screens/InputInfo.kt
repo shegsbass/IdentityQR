@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.shegs.identityqr.navigation.topnav.TopNavigation
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
 import com.shegs.identityqr.util.generateQRCode
@@ -45,11 +46,11 @@ fun InputInfoScreen(
     var twitterHandle by remember { mutableStateOf(TextFieldValue()) }
     var bio by remember { mutableStateOf(TextFieldValue()) }
 
-
+    TopNavigation(navController, "Card Information")
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 100.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {

@@ -20,12 +20,15 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.shegs.identityqr.navigation.topnav.TopNavigation
 import com.shegs.identityqr.util.saveQrCodeToGallery
 import com.shegs.identityqr.util.shareQRCode
 
 @Composable
-fun QRDisplayScreen(qrCodeBitmap: ImageBitmap ) {
+fun QRDisplayScreen(qrCodeBitmap: ImageBitmap, navController: NavController ) {
 
+    TopNavigation(navController, "Generated QR" )
     Box(
         modifier = Modifier
             .fillMaxSize()

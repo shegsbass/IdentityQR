@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -18,32 +16,27 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.shegs.identityqr.navigation.topnav.TopNavigation
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun DisplayInfoScreen(infoId: Int, viewModel: InformationViewModel) {
+fun DisplayInfoScreen(infoId: Int, viewModel: InformationViewModel, navController: NavController) {
 
     viewModel.getSelectedInformation(infoId)
 
     val card by viewModel.selectedInformation.collectAsState()
 
+    TopNavigation(navController, "${card?.cardName}" + " QR Details" )
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp, top = 100.dp)
     ) {
         // Display info details
         card?.let { card ->
-            // Your UI code to display infoEntity attributes goes here
-            Text(
-                text = "${card.cardName}" + " QR Details",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
+            // UI code to display infoEntity attributes goes here
 
             Text(
                 text = "First Name: ${card.firstName}",

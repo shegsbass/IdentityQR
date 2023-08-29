@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.shegs.identityqr"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.shegs.identityqr"
@@ -74,6 +74,8 @@ dependencies {
 
     val nav_version = "2.6.0"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    implementation("androidx.compose.material:material:1.5.0")
 
     val room_version = "2.5.2"
 
