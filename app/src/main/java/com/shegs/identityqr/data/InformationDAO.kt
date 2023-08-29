@@ -20,6 +20,6 @@ interface InformationDAO {
     @Query("SELECT * FROM INFORMATION_TABLE WHERE info_id=:infoId")
     fun getSelectedInformation(infoId: Int): Flow<Information>
 
-    @Query("SELECT * FROM INFORMATION_TABLE")
+    @Query("SELECT * FROM INFORMATION_TABLE ORDER BY createdAt DESC")
     suspend fun getAllInformation(): List<Information>
 }
