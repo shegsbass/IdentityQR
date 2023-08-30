@@ -3,10 +3,10 @@ package com.shegs.identityqr.ui.screens
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,78 +29,78 @@ fun DisplayInfoScreen(infoId: Int, viewModel: InformationViewModel, navControlle
     val card by viewModel.selectedInformation.collectAsState()
 
     TopNavigation(navController, "${card?.cardName}" + " QR Details" )
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp, top = 100.dp)
+            .padding(16.dp, top = 70.dp, bottom = 62.dp)
     ) {
-        // Display info details
-        card?.let { card ->
-            // UI code to display infoEntity attributes goes here
+        item {
 
-            Text(
-                text = "First Name: ${card.firstName}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "Last Name: ${card.lastName}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "Email Address: ${card.emailAddress}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "Home Address: ${card.homeAddress}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "Phone Number: ${card.phoneNumber}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "InstagramHandle: ${card.instagramHandle}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "TwitterHandle: ${card.twitterHandle}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "Bio: ${card.bio}",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            card?.let { card ->
 
-            // Display the QR code image if it's available in the card
-            card.qrCodeImage?.let { qrCodeImageByteArray ->
-                val imageBitmap = BitmapFactory.decodeByteArray(qrCodeImageByteArray, 0, qrCodeImageByteArray.size)?.asImageBitmap()
-                if (imageBitmap != null) {
-                    Image(
-                        bitmap = imageBitmap,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(200.dp) // Adjust the size as needed
-                            .padding(8.dp)
+                    Text(
+                        text = "First Name: ${card.firstName}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
                     )
+                    Text(
+                        text = "Last Name: ${card.lastName}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Email Address: ${card.emailAddress}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Home Address: ${card.homeAddress}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Phone Number: ${card.phoneNumber}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "InstagramHandle: ${card.instagramHandle}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "TwitterHandle: ${card.twitterHandle}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "Bio: ${card.bio}",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    // Display the QR code image if it's available in the card
+                    card.qrCodeImage?.let { qrCodeImageByteArray ->
+                        val imageBitmap = BitmapFactory.decodeByteArray(qrCodeImageByteArray, 0, qrCodeImageByteArray.size)?.asImageBitmap()
+                        if (imageBitmap != null) {
+                            Image(
+                                bitmap = imageBitmap,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(200.dp) // Adjust the size as needed
+                                    .padding(8.dp)
+                            )
+                        }
+                    }
                 }
             }
-
         }
-    }
 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -33,6 +34,7 @@ import androidx.navigation.NavHostController
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 
 @SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
@@ -41,69 +43,75 @@ import kotlinx.coroutines.launch
 fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostController) {
     val cards = viewModel.getAllInformation.collectAsState(initial = emptyList()).value
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            LazyColumn(
+    val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+    LazyColumn(
                 contentPadding = PaddingValues(16.dp),
                 modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .fillMaxSize()
             ) {
                 items(cards) { card ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        elevation = CardDefaults.cardElevation(4.dp),
-                        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        onClick = {
-                            // Navigate to the "displayInfo" screen with the selected card's infoId
-                            navController.navigate("displayInfo/${card.infoId}")
-                        }
-                    ) {
-                        Column(
+
+                    Row(modifier = Modifier) {
+                        Text(
+                            text = card.createdAt?.format(dateFormatter) ?: "",
+                            fontSize = 12.sp
+                        )
+                        
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Card(
                             modifier = Modifier
-                                .padding(16.dp)
-                        ) {
-                            Text(
-                                text = "${card.cardName}",
-                                fontSize = 20.sp
-                            )
-                            Text(
-                                text = "${card.createdAt}",
-                                fontSize = 12.sp
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End
-                            ) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.viewModelScope.launch {
-                                            viewModel.onEvent(
-                                                InformationEvents.DeleteInformation(
-                                                    card
-                                                )
-                                            )
-                                        }
-                                    }
-
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete Card"
-                                    )
-                                }
+                                .width(280.dp)
+                                .height(140.dp)
+                                .padding(8.dp),
+                            elevation = CardDefaults.cardElevation(4.dp),
+                            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer),
+                            onClick = {
+                                // Navigate to the "displayInfo" screen with the selected card's infoId
+                                navController.navigate("displayInfo/${card.infoId}")
                             }
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(16.dp)
+                            ) {
+                                Text(
+                                    text = "${card.cardName}",
+                                    fontSize = 20.sp
+                                )
+                                Text(
+                                    text = card.createdAt?.format(timeFormatter) ?: "",
+                                    fontSize = 12.sp
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.End
+                                ) {
+                                    IconButton(
+                                        onClick = {
+                                            viewModel.viewModelScope.launch {
+                                                viewModel.onEvent(
+                                                    InformationEvents.DeleteInformation(
+                                                        card
+                                                    )
+                                                )
+                                            }
+                                        }
 
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = "Delete Card"
+                                        )
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }
             }
-
-        }
-
 }

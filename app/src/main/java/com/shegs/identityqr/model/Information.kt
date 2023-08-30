@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.shegs.identityqr.util.DateConverter
 import java.time.LocalDateTime
-import javax.inject.Inject
 
 @Entity(tableName = "INFORMATION_TABLE")
 @TypeConverters(DateConverter::class)
