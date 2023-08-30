@@ -4,11 +4,12 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.shegs.identityqr.navigation.bottomnav.BottomNavItem
@@ -18,7 +19,10 @@ import com.shegs.identityqr.navigation.bottomnav.BottomNavItem
 fun BottomNavigationBar(navController: NavHostController,items: List<BottomNavItem>) {
 
 
-            BottomNavigation {
+            BottomNavigation(
+                backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                contentColor = MaterialTheme.colorScheme.background
+            ) {
                 val currentRoute = currentRoute(navController)
 
 
@@ -26,10 +30,33 @@ fun BottomNavigationBar(navController: NavHostController,items: List<BottomNavIt
                     BottomNavigationItem(
                         icon = {
                             val painter = painterResource(bottomNavItem.icon)
-                            Icon(painter = painter, contentDescription = null)
+                            Icon(
+                                painter = painter,
+                                contentDescription = null,
+                                tint = if (currentRoute == bottomNavItem.screenRoute) {
+                                    MaterialTheme.colorScheme.inversePrimary // Selected color
+                                } else {
+                                    MaterialTheme.colorScheme.onPrimary // Unselected color
+                                }
+                            )
                         },
-                        unselectedContentColor = Color.Gray,
-                        label = { Text(bottomNavItem.title) },
+                        selectedContentColor = MaterialTheme.colorScheme.inversePrimary,
+                        label = {
+                            Text(
+                                text = bottomNavItem.title,
+                                color = if (currentRoute == bottomNavItem.screenRoute) {
+                                    MaterialTheme.colorScheme.inversePrimary // Selected color
+                                } else {
+                                    MaterialTheme.colorScheme.onPrimary // Unselected color
+                                },
+                                fontSize = if (currentRoute == bottomNavItem.screenRoute) {
+                                    12.sp // Selected text size
+                                } else {
+                                    10.sp // Unselected text size
+                                }
+
+                            )
+                                },
                         selected = currentRoute == bottomNavItem.screenRoute,
                         onClick = {
                             if (currentRoute != bottomNavItem.screenRoute) {
