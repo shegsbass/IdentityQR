@@ -2,6 +2,7 @@ package com.shegs.identityqr.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -59,6 +61,7 @@ fun InputInfoScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF4F3FA))
             .padding(start = 16.dp, end = 16.dp, top = 70.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {

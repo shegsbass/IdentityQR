@@ -3,6 +3,7 @@ package com.shegs.identityqr.ui.screens
 import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,9 +31,11 @@ fun DisplayInfoScreen(infoId: Int, viewModel: InformationViewModel, navControlle
     val card by viewModel.selectedInformation.collectAsState()
 
     TopNavigation(navController, "${card?.cardName}" + " QR Details" )
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color(0xFFF4F3FA))
             .padding(16.dp, top = 70.dp, bottom = 62.dp)
     ) {
         item {

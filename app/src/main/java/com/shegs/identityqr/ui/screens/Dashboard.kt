@@ -3,6 +3,7 @@ package com.shegs.identityqr.ui.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,11 +28,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.shegs.identityqr.R
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
 import kotlinx.coroutines.launch
@@ -46,72 +56,257 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
-    LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                items(cards) { card ->
+    Column(
+        modifier = Modifier
+        .fillMaxSize()
+            .background(Color(0xFFF4F3FA))
+    ) {
+        pageTitleSection()
+        Spacer(modifier = Modifier.height(16.dp))
+        topSection(navController)
+        historySection()
 
-                    Row(modifier = Modifier) {
+        LazyColumn(
+            contentPadding = PaddingValues(start = 16.dp, bottom = 16.dp, end = 8.dp),
+        ) {
+            items(cards) { card ->
+                Row(
+                    modifier = Modifier
+                ) {
+
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 12.dp)
+                    ) {
+                        Text(
+                            text = "Created on",
+                            fontSize = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                            fontWeight = FontWeight(600),
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+
                         Text(
                             text = card.createdAt?.format(dateFormatter) ?: "",
-                            fontSize = 12.sp
+                            fontSize = 12.sp,
+                            fontFamily = FontFamily(Font(R.font.roboto_regular)),
+                            fontWeight = FontWeight(400),
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
-                        
-                        Spacer(modifier = Modifier.weight(1f))
+                    }
 
-                        Card(
+
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Card(
+                        modifier = Modifier
+                            .width(280.dp)
+                            .height(100.dp)
+                            .padding(8.dp),
+                        elevation = CardDefaults.cardElevation(1.dp),
+                        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer),
+                        onClick = {
+                            // Navigate to the "displayInfo" screen with the selected card's infoId
+                            navController.navigate("displayInfo/${card.infoId}")
+                        }
+                    ) {
+
+                        Row(
                             modifier = Modifier
-                                .width(280.dp)
-                                .height(140.dp)
-                                .padding(8.dp),
-                            elevation = CardDefaults.cardElevation(4.dp),
-                            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer),
-                            onClick = {
-                                // Navigate to the "displayInfo" screen with the selected card's infoId
-                                navController.navigate("displayInfo/${card.infoId}")
-                            }
+                                .fillMaxSize(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(
                                 modifier = Modifier
-                                    .padding(16.dp)
+                                    .padding(12.dp),
+                                verticalArrangement = Arrangement.Center
                             ) {
                                 Text(
                                     text = "${card.cardName}",
-                                    fontSize = 20.sp
+                                    fontSize = 18.sp,
+                                    fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                                    fontWeight = FontWeight(600),
+                                    letterSpacing = 1.sp
                                 )
                                 Text(
                                     text = card.createdAt?.format(timeFormatter) ?: "",
-                                    fontSize = 12.sp
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily(Font(R.font.roboto_regular)),
+                                    fontWeight = FontWeight(400)
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.End
-                                ) {
-                                    IconButton(
-                                        onClick = {
-                                            viewModel.viewModelScope.launch {
-                                                viewModel.onEvent(
-                                                    InformationEvents.DeleteInformation(
-                                                        card
-                                                    )
-                                                )
-                                            }
-                                        }
-
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Delete,
-                                            contentDescription = "Delete Card"
-                                        )
-                                    }
-                                }
 
                             }
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End,
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        viewModel.viewModelScope.launch {
+                                            viewModel.onEvent(
+                                                InformationEvents.DeleteInformation(
+                                                    card
+                                                )
+                                            )
+                                        }
+                                    }
+
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete Card",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
                         }
+
                     }
                 }
             }
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun topSection(navController: NavHostController){
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Card(
+            modifier = Modifier
+                .width(180.dp)
+                .height(260.dp)
+                .padding(start = 16.dp, top = 16.dp, bottom = 16.dp, end = 8.dp),
+            elevation = CardDefaults.cardElevation(4.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary),
+            onClick = {
+                navController.navigate("add_info")
+            }
+        ){
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.add_circle_outline),
+                    contentDescription = "Add card",
+                    tint = MaterialTheme.colorScheme.tertiaryContainer,
+                    modifier = Modifier
+                        .size(80.dp)
+                )
+
+                Text(
+                    text = "Create Card",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.roboto_black)),
+                    fontWeight = FontWeight(600),
+                    color = MaterialTheme.colorScheme.onTertiary
+                )
+
+                Text(
+                    text = "Your journey to digital identity begins here. Let's get started",
+                    fontSize = 12.sp,
+                    fontFamily = FontFamily(Font(R.font.roboto_regular)),
+                    fontWeight = FontWeight(400),
+                    lineHeight = 14.sp,
+                    color = MaterialTheme.colorScheme.onTertiary
+                )
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .width(180.dp)
+                .height(260.dp)
+                .padding(start = 8.dp, top = 16.dp, bottom = 16.dp, end = 16.dp),
+            elevation = CardDefaults.cardElevation(1.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.scrim),
+        ){
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.qr_code_scanner),
+                    contentDescription = "Add card",
+                    tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .alpha(0.5F)
+                )
+
+                Text(
+                    text = "Scan QR",
+                    fontSize = 16.sp,
+                    fontFamily = FontFamily(Font(R.font.roboto_black)),
+                    fontWeight = FontWeight(600),
+                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                )
+
+//                Text(
+//                    text = "Your journey to digital identity begins here. Let's get started",
+//                    fontSize = 12.sp,
+//                    fontFamily = FontFamily(Font(R.font.rubik_regular)),
+//                    fontWeight = FontWeight(400),
+//                    lineHeight = 14.sp,
+//                    color = MaterialTheme.colorScheme.onTertiary
+//                )
+            }
+
+        }
+    }
+}
+
+@Composable
+fun historySection(){
+    Column(
+        modifier = Modifier
+            .padding(top = 28.dp, start = 16.dp, end = 16.dp)
+    )
+    {
+        Text(
+            text = "Card History",
+            fontSize = 32.sp,
+            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+            fontWeight = FontWeight(600),
+            color = Color.Black
+        )
+    }
+}
+
+@Composable
+fun pageTitleSection(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp, start = 24.dp, end = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    )
+    {
+        Text(
+            text = "IdentityQR",
+            fontSize = 16.sp,
+            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+            fontWeight = FontWeight(600),
+            color = Color.Black
+        )
+    }
 }
