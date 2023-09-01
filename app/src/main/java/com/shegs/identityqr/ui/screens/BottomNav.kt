@@ -12,11 +12,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.shegs.identityqr.navigation.bottomnav.BottomNavItem
+import com.shegs.identityqr.navigation.bottomnav.NavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigationBar(navController: NavHostController,items: List<BottomNavItem>) {
+fun BottomNavigationBar(navController: NavHostController,items: List<NavItem>) {
 
 
             BottomNavigation(

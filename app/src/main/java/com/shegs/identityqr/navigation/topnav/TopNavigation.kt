@@ -60,7 +60,7 @@ fun TopNavigation(navController: NavController, screenName: String) {
 
         }
 
-        Spacer(modifier = Modifier.width(56.dp))
+        Spacer(modifier = Modifier.width(32.dp))
 
 
             Text(

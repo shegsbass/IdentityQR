@@ -2,22 +2,30 @@ package com.shegs.identityqr.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,12 +34,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.shegs.identityqr.R
 import com.shegs.identityqr.navigation.topnav.TopNavigation
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
@@ -58,96 +70,491 @@ fun InputInfoScreen(
     var bio by remember { mutableStateOf(TextFieldValue()) }
 
     TopNavigation(navController, "Card Information")
+
+    val customColor = TextFieldDefaults.textFieldColors(
+    containerColor = MaterialTheme.colorScheme.primaryContainer,
+    cursorColor = MaterialTheme.colorScheme.tertiary,
+    disabledLabelColor = MaterialTheme.colorScheme.primaryContainer,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent
+    )
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF4F3FA))
             .padding(start = 16.dp, end = 16.dp, top = 70.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
 
-            Column {
+            Column() {
+                val maxLength = 20
+                val minLength = 3
+
+                Text(
+                    text = "Card Name",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 4.dp, top = 24.dp),
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                    fontWeight = FontWeight(600),
+                    fontSize = 12.sp
+                )
+
                 TextField(
                     value = cardName.text,
                     onValueChange = { cardName = cardName.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    placeholder = { Text("Enter Card Name") }
+                    placeholder = {
+                        Text(
+                            text = "Enter Card Name",
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontFamily = FontFamily(Font(R.font.roboto_light)),
+                            fontWeight = FontWeight(300),
+                            fontSize = 12.sp
+                        ) },
+                    shape = RoundedCornerShape(12.dp),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    colors = customColor,
+                    trailingIcon = {
+                            IconButton(onClick = { cardName = TextFieldValue() }) {
+                                if (cardName.text.length in minLength..maxLength) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Check,
+                                    tint = Color(0xFF006400),
+                                    contentDescription = null
+                                )
+                            }else{
+                                    Icon(
+                                        imageVector = Icons.Outlined.Clear,
+                                        tint = Color.Red,
+                                        contentDescription = null
+                                    )
+                                }
+                        }
+                                   },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                )
+                Text(
+                    text = "${cardName.text.length} / $maxLength",
+                    fontSize = 8.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    textAlign = TextAlign.End,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
 
-                TextField(
-                    value = firstName.text,
-                    onValueChange = { firstName = firstName.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("First Name") }
-                )
 
-                TextField(
-                    value = lastName.text,
-                    onValueChange = { lastName = lastName.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Last Name") }
-                )
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(
+                        modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp)
+                    ) {
+                        Text(
+                            text = "First Name",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 4.dp),
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                            fontWeight = FontWeight(600),
+                            fontSize = 12.sp
+                        )
+                        TextField(
+                            value = firstName.text,
+                            onValueChange = { firstName = firstName.copy(text = it) },
+                            singleLine = true,
+                            placeholder = {
+                                Text(
+                                    text = "First Name",
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                    fontWeight = FontWeight(300),
+                                    fontSize = 12.sp
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                            colors = customColor,
+                            trailingIcon = {
+                                if (firstName.text.isNotEmpty() && firstName.text.length >= minLength) {
+                                    IconButton(onClick = { firstName = TextFieldValue() }) {
+                                        Icon(
+                                            imageVector = Icons.Outlined.Check,
+                                            tint = Color(0xFF006400),
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(52.dp),
+                        )
+                    }
 
-                TextField(
-                    value = emailAddress.text,
-                    onValueChange = { emailAddress = emailAddress.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Email") }
-                )
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = "Last Name",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 4.dp),
+                            textAlign = TextAlign.Start,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                            fontWeight = FontWeight(600),
+                            fontSize = 12.sp
+                        )
 
-                TextField(
-                    value = homeAddress.text,
-                    onValueChange = { homeAddress = homeAddress.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Home Address") }
-                )
+                        TextField(
+                            value = lastName.text,
+                            onValueChange = { lastName = lastName.copy(text = it) },
+                            singleLine = true,
+                            placeholder = {
+                                Text(
+                                    text = "Last Name",
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                    fontWeight = FontWeight(300),
+                                    fontSize = 12.sp
+                                )
+                            },
+                            shape = RoundedCornerShape(12.dp),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                            colors = customColor,
+                            trailingIcon = {
+                                if (lastName.text.isNotEmpty() && lastName.text.length >= minLength) {
+                                    IconButton(onClick = { lastName = TextFieldValue() }) {
+                                        Icon(
+                                            imageVector = Icons.Outlined.Check,
+                                            tint = Color(0xFF006400),
+                                            contentDescription = null
+                                        )
+                                    }
+                                }
+                            },
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                .height(52.dp),
+                        )
+                    }
+                }
 
 
-                TextField(
-                    value = phoneNumber.text,
-                    onValueChange = { phoneNumber = phoneNumber.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Phone Number") }
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(end = 4.dp, top = 8.dp)
+                ) {
+                    Text(
+                        text = "Email Address",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 12.sp
+                    )
+                    TextField(
+                        value = emailAddress.text,
+                        onValueChange = { emailAddress = emailAddress.copy(text = it) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Email",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                fontWeight = FontWeight(300),
+                                fontSize = 12.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        colors = customColor,
+                        trailingIcon = {
+                            if (emailAddress.text.isNotEmpty() && emailAddress.text.length >= minLength) {
+                                IconButton(onClick = { emailAddress = TextFieldValue() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Check,
+                                        tint = Color(0xFF006400),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                    )
+                }
 
-                TextField(
-                    value = instagramHandle.text,
-                    onValueChange = { instagramHandle = instagramHandle.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Instagram Handle") }
-                )
 
-                TextField(
-                    value = twitterHandle.text,
-                    onValueChange = { twitterHandle = twitterHandle.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Twitter Handle") }
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(end = 4.dp, top = 8.dp)
+                ) {
+                    Text(
+                        text = "Home Address",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 12.sp
+                    )
+                    TextField(
+                        value = homeAddress.text,
+                        onValueChange = { homeAddress = homeAddress.copy(text = it) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Home Address",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                fontWeight = FontWeight(300),
+                                fontSize = 12.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        colors = customColor,
+                        trailingIcon = {
+                            if (homeAddress.text.isNotEmpty() && homeAddress.text.length >= minLength) {
+                                IconButton(onClick = { homeAddress = TextFieldValue() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Check,
+                                        tint = Color(0xFF006400),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                    )
+                }
 
-                TextField(
-                    value = bio.text,
-                    onValueChange = { bio = bio.copy(text = it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    placeholder = { Text("Bio") }
-                )
+
+                Column(
+                    modifier = Modifier
+                        .padding(end = 4.dp, top = 8.dp)
+                ) {
+                    Text(
+                        text = "Phone Number",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 12.sp
+                    )
+                    TextField(
+                        value = phoneNumber.text,
+                        onValueChange = { phoneNumber = phoneNumber.copy(text = it) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Phone Number",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                fontWeight = FontWeight(300),
+                                fontSize = 12.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        colors = customColor,
+                        trailingIcon = {
+                            if (phoneNumber.text.isNotEmpty() && phoneNumber.text.length >= minLength) {
+                                IconButton(onClick = { phoneNumber = TextFieldValue() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Check,
+                                        tint = Color(0xFF006400),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(end = 4.dp, top = 8.dp)
+                ) {
+                    Text(
+                        text = "Instagram Handle",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 12.sp
+                    )
+                    TextField(
+                        value = instagramHandle.text,
+                        onValueChange = { instagramHandle = instagramHandle.copy(text = it) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Instagram Handle",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                fontWeight = FontWeight(300),
+                                fontSize = 12.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        colors = customColor,
+                        trailingIcon = {
+                            if (instagramHandle.text.isNotEmpty() && instagramHandle.text.length >= minLength) {
+                                IconButton(onClick = { instagramHandle = TextFieldValue() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Check,
+                                        tint = Color(0xFF006400),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                    )
+                }
+
+
+                Column(
+                    modifier = Modifier
+                        .padding(end = 4.dp, top = 8.dp)
+                ) {
+                    Text(
+                        text = "Twitter Handle",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 12.sp
+                    )
+                    TextField(
+                        value = twitterHandle.text,
+                        onValueChange = { twitterHandle = twitterHandle.copy(text = it) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Twitter Handle",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                fontWeight = FontWeight(300),
+                                fontSize = 12.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        colors = customColor,
+                        trailingIcon = {
+                            if (twitterHandle.text.isNotEmpty() && twitterHandle.text.length >= minLength) {
+                                IconButton(onClick = { twitterHandle = TextFieldValue() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Check,
+                                        tint = Color(0xFF006400),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(52.dp),
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(end = 4.dp, top = 8.dp)
+                ) {
+                    Text(
+                        text = "Bio",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 4.dp),
+                        textAlign = TextAlign.Start,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 12.sp
+                    )
+                    TextField(
+                        value = bio.text,
+                        onValueChange = { bio = bio.copy(text = it) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                text = "Write a short Bio",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(R.font.roboto_light)),
+                                fontWeight = FontWeight(300),
+                                fontSize = 12.sp
+                            )
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        colors = customColor,
+                        trailingIcon = {
+                            if (bio.text.isNotEmpty() && bio.text.length >= minLength) {
+                                IconButton(onClick = { bio = TextFieldValue() }) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Check,
+                                        tint = Color(0xFF006400),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(104.dp),
+                    )
+                }
             }
+
+
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 28.dp, bottom = 62.dp)
+                    .padding(top = 28.dp, bottom = 70.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary)
+                colors = CardDefaults.cardColors(Color(0xFFFFC107))
             ) {
                 Column(
                     modifier = Modifier
@@ -191,14 +598,15 @@ fun InputInfoScreen(
                             }
                     ) {
                         Text(
-                            text = "Save Info",
+                            text = "Generate QR Code",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.onPrimary,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp
+                            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                            fontWeight = FontWeight(600),
+                            fontSize = 16.sp
                         )
                     }
                 }

@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.shegs.identityqr.R
+import com.shegs.identityqr.navigation.bottomnav.NavItem
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
 
     Column(
         modifier = Modifier
-        .fillMaxSize()
+            .fillMaxSize()
             .background(Color(0xFFF4F3FA))
     ) {
         pageTitleSection()
@@ -191,7 +192,7 @@ fun topSection(navController: NavHostController){
             elevation = CardDefaults.cardElevation(4.dp),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiary),
             onClick = {
-                navController.navigate("add_info")
+                navController.navigate(NavItem.Create.screenRoute)
             }
         ){
             Column(
@@ -259,15 +260,6 @@ fun topSection(navController: NavHostController){
                     fontWeight = FontWeight(600),
                     color = MaterialTheme.colorScheme.onTertiaryContainer
                 )
-
-//                Text(
-//                    text = "Your journey to digital identity begins here. Let's get started",
-//                    fontSize = 12.sp,
-//                    fontFamily = FontFamily(Font(R.font.rubik_regular)),
-//                    fontWeight = FontWeight(400),
-//                    lineHeight = 14.sp,
-//                    color = MaterialTheme.colorScheme.onTertiary
-//                )
             }
 
         }

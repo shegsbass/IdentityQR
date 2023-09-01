@@ -14,7 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.shegs.identityqr.navigation.bottomnav.BottomNavItem
+import com.shegs.identityqr.navigation.bottomnav.NavItem
 import com.shegs.identityqr.ui.screens.BottomNavigationBar
 import com.shegs.identityqr.ui.screens.DashboardScreen
 import com.shegs.identityqr.ui.screens.DisplayInfoScreen
@@ -30,8 +30,8 @@ fun AppNavigation(navController: NavHostController) {
     val viewModel: InformationViewModel = hiltViewModel()
 
     val items = listOf(
-        BottomNavItem.History,
-        BottomNavItem.Create,
+        NavItem.History,
+        NavItem.Create,
     )
 
     Scaffold(
@@ -39,12 +39,12 @@ fun AppNavigation(navController: NavHostController) {
             BottomNavigationBar(navController = navController, items = items)
         }
     ){innerPadding ->
-        NavHost(navController = navController, startDestination = BottomNavItem.History.screenRoute){
-            composable(BottomNavItem.History.screenRoute){
+        NavHost(navController = navController, startDestination = NavItem.History.screenRoute){
+            composable(NavItem.History.screenRoute){
                 DashboardScreen(viewModel = viewModel, navController = navController)
             }
 
-            composable(BottomNavItem.Create.screenRoute){
+            composable(NavItem.Create.screenRoute){
                 InputInfoScreen(viewModel = viewModel, navController = navController, onGenerateQRCode = { qrText ->
                     val qrText = generateQRCode(qrText)
                     navController.navigate("qrCodeDisplay/$qrText")
