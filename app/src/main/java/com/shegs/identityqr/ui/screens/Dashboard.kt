@@ -17,16 +17,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.DismissDirection
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,20 +40,19 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.shegs.identityqr.R
 import com.shegs.identityqr.navigation.bottomnav.NavItem
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
-import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("SuspiciousIndentation")
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostController) {
+
     val cards = viewModel.getAllInformation.collectAsState(initial = emptyList()).value
 
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -71,103 +72,107 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
             contentPadding = PaddingValues(start = 16.dp, bottom = 16.dp, end = 8.dp),
         ) {
             items(cards) { card ->
-                Row(
-                    modifier = Modifier
-                ) {
 
-                    Column(
-                        modifier = Modifier
-                            .padding(top = 12.dp)
-                    ) {
-                        Text(
-                            text = "Created on",
-                            fontSize = 12.sp,
-                            fontFamily = FontFamily(Font(R.font.roboto_bold)),
-                            fontWeight = FontWeight(600),
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
+                val dismissState = rememberDismissState()
 
-                        Text(
-                            text = card.createdAt?.format(dateFormatter) ?: "",
-                            fontSize = 12.sp,
-                            fontFamily = FontFamily(Font(R.font.roboto_regular)),
-                            fontWeight = FontWeight(400),
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
-
-
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Card(
-                        modifier = Modifier
-                            .width(280.dp)
-                            .height(100.dp)
-                            .padding(8.dp),
-                        elevation = CardDefaults.cardElevation(1.dp),
-                        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer),
-                        onClick = {
-                            // Navigate to the "displayInfo" screen with the selected card's infoId
-                            navController.navigate("displayInfo/${card.infoId}")
-                        }
-                    ) {
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(12.dp),
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = "${card.cardName}",
-                                    fontSize = 18.sp,
-                                    fontFamily = FontFamily(Font(R.font.roboto_bold)),
-                                    fontWeight = FontWeight(600),
-                                    letterSpacing = 1.sp
-                                )
-                                Text(
-                                    text = card.createdAt?.format(timeFormatter) ?: "",
-                                    fontSize = 12.sp,
-                                    fontFamily = FontFamily(Font(R.font.roboto_regular)),
-                                    fontWeight = FontWeight(400)
-                                )
-
-                            }
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End,
-                            ) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.viewModelScope.launch {
-                                            viewModel.onEvent(
-                                                InformationEvents.DeleteInformation(
-                                                    card
-                                                )
-                                            )
-                                        }
-                                    }
-
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Delete,
-                                        contentDescription = "Delete Card",
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                }
-                            }
-                        }
-
+                // Use LaunchedEffect to handle the side effect when card is dismissed
+                LaunchedEffect(dismissState.isDismissed(DismissDirection.EndToStart)) {
+                    if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+                        // Delete the card from the database
+                        viewModel.onEvent(InformationEvents.DeleteInformation(card))
                     }
                 }
+
+                SwipeToDismiss(
+                    state = dismissState,
+                    directions = setOf(DismissDirection.EndToStart),
+                    background = {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Transparent)
+                        ){
+
+                        }
+                    },
+
+                    dismissContent = {
+                        Row(
+                            modifier = Modifier
+                        ) {
+
+                            Column(
+                                modifier = Modifier
+                                    .padding(top = 12.dp)
+                            ) {
+                                Text(
+                                    text = "Created on",
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                                    fontWeight = FontWeight(600),
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+
+                                Text(
+                                    text = card.createdAt?.format(dateFormatter) ?: "",
+                                    fontSize = 12.sp,
+                                    fontFamily = FontFamily(Font(R.font.roboto_regular)),
+                                    fontWeight = FontWeight(400),
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Card(
+                                modifier = Modifier
+                                    .width(280.dp)
+                                    .height(100.dp)
+                                    .padding(8.dp),
+                                elevation = CardDefaults.cardElevation(1.dp),
+                                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.tertiaryContainer),
+                                onClick = {
+                                    // Navigate to the "displayInfo" screen with the selected card's infoId
+                                    navController.navigate("displayInfo/${card.infoId}")
+                                }
+                            ) {
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxSize(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(12.dp),
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Text(
+                                            text = "${card.cardName}",
+                                            fontSize = 18.sp,
+                                            fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                                            fontWeight = FontWeight(600),
+                                            letterSpacing = 1.sp
+                                        )
+                                        Text(
+                                            text = card.createdAt?.format(timeFormatter) ?: "",
+                                            fontSize = 12.sp,
+                                            fontFamily = FontFamily(Font(R.font.roboto_regular)),
+                                            fontWeight = FontWeight(400)
+                                        )
+
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+
+                )
+
+
             }
         }
     }

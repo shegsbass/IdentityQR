@@ -545,7 +545,7 @@ fun InputInfoScreen(
                                 )
                             },
                             shape = RoundedCornerShape(12.dp),
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                             colors = customColor,
                             trailingIcon = {
                                 if (bio.text.isNotEmpty() && bio.text.length >= minLength) {

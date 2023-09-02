@@ -4,8 +4,6 @@ import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shegs.identityqr.model.Information
@@ -27,18 +25,6 @@ import javax.inject.Inject
 class InformationViewModel @Inject constructor(
     private val informationRepository: InformationRepository
 ): ViewModel(){
-
-    var firstName = mutableStateOf(TextFieldValue())
-    var lastName = mutableStateOf(TextFieldValue())
-    var cardName = mutableStateOf("")
-    var emailAddress = mutableStateOf(TextFieldValue())
-    var homeAddress = mutableStateOf(TextFieldValue())
-    var phoneNumber = mutableStateOf(TextFieldValue())
-    var instagramHandle = mutableStateOf(TextFieldValue())
-    var twitterHandle = mutableStateOf(TextFieldValue())
-    var bio = mutableStateOf(TextFieldValue())
-
-
 
     private val currentDate = Date()
     private val _infoState = MutableStateFlow(InformationState(createdAt = currentDate))
