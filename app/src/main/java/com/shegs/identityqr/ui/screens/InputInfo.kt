@@ -71,7 +71,6 @@ fun InputInfoScreen(
 
         val configuration = LocalConfiguration.current
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-// Remember the values of the input fields
         var firstName by remember { mutableStateOf(TextFieldValue()) }
         var lastName by remember { mutableStateOf(TextFieldValue()) }
         var cardName by remember { mutableStateOf(TextFieldValue()) }
@@ -584,14 +583,14 @@ fun InputInfoScreen(
                                 .fillMaxWidth()
                                 .clickable {
                                     val qrText = buildString {
-                                        append("First Name: $firstName\n")
-                                        append("Last Name: $lastName\n")
-                                        append("Email Address: $emailAddress\n")
-                                        append("Home Address: $homeAddress\n")
-                                        append("Phone Number: $phoneNumber\n")
-                                        append("Instagram Handle: $instagramHandle\n")
-                                        append("Twitter Handle: $twitterHandle\n")
-                                        append("Bio: $bio")
+                                        append("First Name: ${firstName.text}\n")
+                                        append("Last Name: ${lastName.text}\n")
+                                        append("Email Address: ${emailAddress.text}\n")
+                                        append("Home Address: ${homeAddress.text}\n")
+                                        append("Phone Number: ${phoneNumber.text}\n")
+                                        append("Instagram Handle: ${instagramHandle.text}\n")
+                                        append("Twitter Handle: ${twitterHandle.text}\n")
+                                        append("Bio: ${bio.text}")
                                     }
 
                                     val qrBitmap =
