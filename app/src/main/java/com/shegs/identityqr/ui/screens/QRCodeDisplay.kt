@@ -171,12 +171,12 @@ fun QRDisplayScreen(qrCodeBitmap: ImageBitmap, navController: NavController ) {
 
             Text(
                 text = "QR Code Generated \uD83D\uDC4D",
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                fontSize = 24.sp,
+                fontSize = 20.sp,
                 lineHeight = 16.sp,
-                fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                fontFamily = FontFamily(Font(R.font.roboto_black)),
                 fontWeight = FontWeight(600),
                 textAlign = TextAlign.Center,
                 modifier = Modifier

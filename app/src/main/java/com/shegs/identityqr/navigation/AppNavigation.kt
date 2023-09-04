@@ -63,14 +63,14 @@ fun AppNavigation(navController: NavHostController) {
                 }
             }
 
-            composable(
-                route = "displayInfo/{infoId}",
-                arguments = listOf(navArgument("infoId") { type = NavType.IntType })
-            ) { backStackEntry ->
-                // Retrieve the infoId from the route
-                val infoId = backStackEntry.arguments?.getInt("infoId") ?: 0
-                DisplayInfoScreen(infoId, viewModel, navController)
-            }
+//            composable(
+//                route = "displayInfo/{infoId}",
+//                arguments = listOf(navArgument("infoId") { type = NavType.IntType })
+//            ) { backStackEntry ->
+//                // Retrieve the infoId from the route
+//                val infoId = backStackEntry.arguments?.getInt("infoId") ?: 0
+//                DisplayInfoScreen(infoId, viewModel, navController)
+//            }
         }
     }
 
