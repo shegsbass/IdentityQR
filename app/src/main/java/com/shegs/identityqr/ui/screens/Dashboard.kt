@@ -17,14 +17,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.FixedThreshold
 import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,11 +45,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.shegs.identityqr.R
 import com.shegs.identityqr.navigation.bottomnav.NavItem
 import com.shegs.identityqr.ui.events.InformationEvents
 import com.shegs.identityqr.ui.viewmodel.InformationViewModel
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
 @SuppressLint("SuspiciousIndentation")
@@ -57,6 +64,9 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
 
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+    // Define a constant for the dismiss threshold
+    val DISMISS_THRESHOLD = 150.dp
 
     Column(
         modifier = Modifier
@@ -86,12 +96,32 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
                 SwipeToDismiss(
                     state = dismissState,
                     directions = setOf(DismissDirection.EndToStart),
+                    dismissThresholds = { direction ->
+                        // Set the threshold for dismissing the card
+                        FixedThreshold(DISMISS_THRESHOLD)
+                    },
                     background = {
+                        Spacer(modifier = Modifier.width(120.dp))
                         Row(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color.Transparent)
+                                .width(280.dp)
+                                .height(100.dp)
+                                .padding(8.dp)
+                                .background(Color.Red, shape = RoundedCornerShape(20.dp))
                         ){
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(12.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete card"
+                                )
+                            }
+
 
                         }
                     },
@@ -161,6 +191,59 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
                                             fontFamily = FontFamily(Font(R.font.roboto_regular)),
                                             fontWeight = FontWeight(400)
                                         )
+
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxSize(),
+                                            horizontalArrangement = Arrangement.Center,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Column(
+                                                modifier = Modifier
+                                                    .padding(12.dp),
+                                                verticalArrangement = Arrangement.Center
+                                            ) {
+                                                Text(
+                                                    text = "${card.cardName}",
+                                                    fontSize = 18.sp,
+                                                    fontFamily = FontFamily(Font(R.font.roboto_bold)),
+                                                    fontWeight = FontWeight(600),
+                                                    letterSpacing = 1.sp
+                                                )
+                                                Text(
+                                                    text = card.createdAt?.format(timeFormatter) ?: "",
+                                                    fontSize = 12.sp,
+                                                    fontFamily = FontFamily(Font(R.font.roboto_regular)),
+                                                    fontWeight = FontWeight(400)
+                                                )
+
+                                            }
+
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                horizontalArrangement = Arrangement.End,
+                                            ) {
+                                                IconButton(
+                                                    onClick = {
+                                                        viewModel.viewModelScope.launch {
+                                                            viewModel.onEvent(
+                                                                InformationEvents.DeleteInformation(
+                                                                    card
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+
+                                                ) {
+                                                    Icon(
+                                                        imageVector = Icons.Default.Delete,
+                                                        contentDescription = "Delete Card",
+                                                        modifier = Modifier.size(16.dp)
+                                                    )
+                                                }
+                                            }
+                                        }
 
                                     }
 
