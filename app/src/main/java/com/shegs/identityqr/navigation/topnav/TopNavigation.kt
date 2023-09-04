@@ -2,9 +2,9 @@ package com.shegs.identityqr.navigation.topnav
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +33,7 @@ fun TopNavigation(navController: NavController, screenName: String) {
         modifier = Modifier
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(72.dp)
     ) {
         Card(
             modifier = Modifier
@@ -44,7 +45,6 @@ fun TopNavigation(navController: NavController, screenName: String) {
             elevation = CardDefaults.cardElevation(2.dp), // Add elevation
             shape = RoundedCornerShape(8.dp) // Add corner radius
         ) {
-
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center // Center the Image within the Box
@@ -59,8 +59,6 @@ fun TopNavigation(navController: NavController, screenName: String) {
             }
 
         }
-
-        Spacer(modifier = Modifier.width(32.dp))
 
 
             Text(

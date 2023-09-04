@@ -1,5 +1,6 @@
 package com.shegs.identityqr.ui.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -18,7 +20,9 @@ import com.shegs.identityqr.navigation.bottomnav.NavItem
 @Composable
 fun BottomNavigationBar(navController: NavHostController,items: List<NavItem>) {
 
-
+    Column(
+        modifier = Modifier
+    ) {
             BottomNavigation(
                 backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 contentColor = MaterialTheme.colorScheme.background
@@ -56,7 +60,7 @@ fun BottomNavigationBar(navController: NavHostController,items: List<NavItem>) {
                                 }
 
                             )
-                                },
+                        },
                         selected = currentRoute == bottomNavItem.screenRoute,
                         onClick = {
                             if (currentRoute != bottomNavItem.screenRoute) {
@@ -65,6 +69,7 @@ fun BottomNavigationBar(navController: NavHostController,items: List<NavItem>) {
                         }
                     )
                 }
+            }
 
         }
 }

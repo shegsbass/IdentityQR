@@ -66,7 +66,7 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
     // Define a constant for the dismiss threshold
-    val DISMISS_THRESHOLD = 150.dp
+    val DISMISS_THRESHOLD = 100.dp
 
     Column(
         modifier = Modifier
@@ -250,17 +250,24 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
                                 }
 
                             }
+
                         }
+
+
                     }
 
                 )
-
-
             }
+
         }
+        Spacer(modifier = Modifier.height(100.dp))
+
     }
 
+
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

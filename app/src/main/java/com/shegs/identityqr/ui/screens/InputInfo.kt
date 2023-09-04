@@ -613,6 +613,7 @@ fun InputInfoScreen(
                                     viewModel.onEvent(InformationEvents.SaveUserInput(userInfo))
 
                                     navController.navigate("qrCodeDisplay/$qrText")
+
                                 }
                         ) {
                             Text(
