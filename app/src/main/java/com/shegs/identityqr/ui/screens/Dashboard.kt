@@ -2,6 +2,7 @@ package com.shegs.identityqr.ui.screens
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -48,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -310,6 +312,8 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
 @Composable
 fun topSection(navController: NavHostController){
 
+    val context = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -368,6 +372,9 @@ fun topSection(navController: NavHostController){
                 .padding(start = 8.dp, top = 16.dp, bottom = 16.dp, end = 16.dp),
             elevation = CardDefaults.cardElevation(1.dp),
             colors = CardDefaults.cardColors(MaterialTheme.colorScheme.scrim),
+            onClick = {
+                Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
+            }
         ){
             Column(
                 modifier = Modifier

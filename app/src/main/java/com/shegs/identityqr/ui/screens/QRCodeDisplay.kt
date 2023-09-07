@@ -1,5 +1,6 @@
 package com.shegs.identityqr.ui.screens
 
+import android.widget.Toast
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -130,7 +131,10 @@ fun QRDisplayScreen(qrCodeBitmap: ImageBitmap, navController: NavController ) {
                 contentDescription = "Save QR Code",
                 modifier = Modifier
                     .size(28.dp)
-                    .clickable { saveQrCodeToGallery(context, qrCodeBitmap, "MyQRCode") }
+                    .clickable {
+                        saveQrCodeToGallery(context, qrCodeBitmap, "MyQRCode")
+                        Toast.makeText(context, "Saved Successfully", Toast.LENGTH_SHORT).show()
+                    }
             )
         }
 
