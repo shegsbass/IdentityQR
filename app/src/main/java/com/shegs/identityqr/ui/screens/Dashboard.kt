@@ -307,10 +307,9 @@ fun DashboardScreen(viewModel: InformationViewModel, navController: NavHostContr
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun topSection(navController: NavHostController){
+fun topSection(navController: NavHostController) {
 
     val context = LocalContext.current
 
@@ -330,7 +329,7 @@ fun topSection(navController: NavHostController){
             onClick = {
                 navController.navigate(NavItem.Create.screenRoute)
             }
-        ){
+        ) {
             Column(
                 modifier = Modifier
                     .padding(16.dp)
@@ -375,7 +374,7 @@ fun topSection(navController: NavHostController){
             onClick = {
                 Toast.makeText(context, "Coming Soon", Toast.LENGTH_SHORT).show()
             }
-        ){
+        ) {
             Column(
                 modifier = Modifier
                     .padding(16.dp)
@@ -406,7 +405,7 @@ fun topSection(navController: NavHostController){
 }
 
 @Composable
-fun historySection(){
+fun historySection() {
     Column(
         modifier = Modifier
             .padding(top = 28.dp, start = 16.dp, end = 16.dp)
@@ -423,7 +422,7 @@ fun historySection(){
 }
 
 @Composable
-fun pageTitleSection(){
+fun pageTitleSection() {
     Column(
         modifier = Modifier
             .fillMaxWidth()

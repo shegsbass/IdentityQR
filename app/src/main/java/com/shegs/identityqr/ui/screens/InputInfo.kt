@@ -82,11 +82,13 @@ fun InputInfoScreen(
         var bio by remember { mutableStateOf(TextFieldValue()) }
 
         TopNavigation(navController, "Card Information")
-        IdentityCard(firstName =if(firstName.text.isEmpty()) {
-            null
-        } else firstName.text , lastName = if(lastName.text.isEmpty()) {
-            null
-        } else lastName.text)
+        IdentityCard(
+            firstName = if (firstName.text.isEmpty()) {
+                null
+            } else firstName.text, lastName = if (lastName.text.isEmpty()) {
+                null
+            } else lastName.text
+        )
 
 
         val customColor = TextFieldDefaults.textFieldColors(
@@ -132,7 +134,8 @@ fun InputInfoScreen(
                                 fontFamily = FontFamily(Font(R.font.roboto_light)),
                                 fontWeight = FontWeight(300),
                                 fontSize = 12.sp
-                            ) },
+                            )
+                        },
                         shape = RoundedCornerShape(12.dp),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         colors = customColor,
@@ -144,7 +147,7 @@ fun InputInfoScreen(
                                         tint = Color(0xFF006400),
                                         contentDescription = null
                                     )
-                                }else{
+                                } else {
                                     Icon(
                                         imageVector = Icons.Outlined.Clear,
                                         tint = Color.Red,
@@ -168,7 +171,7 @@ fun InputInfoScreen(
                     )
 
 
-                    Row (
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -646,65 +649,65 @@ fun IdentityCard(firstName: String?, lastName: String?) {
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     if (!isLandscape) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 82.dp)
-                    .aspectRatio(1.586f), // Standard credit card aspect ratio
-                elevation = CardDefaults.cardElevation(12.dp),
-                colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onPrimaryContainer)
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 82.dp)
+                .aspectRatio(1.586f), // Standard credit card aspect ratio
+            elevation = CardDefaults.cardElevation(12.dp),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onPrimaryContainer)
+        ) {
+
+            Box(
+                modifier = Modifier.fillMaxSize()
             ) {
-
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ){
-                    Column(
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    // First Name
+                    Text(
+                        text = firstName ?: "First Name",
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        // First Name
-                        Text(
-                            text = firstName ?: "First Name",
-                            modifier = Modifier
-                                .align(Alignment.Start),
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontFamily = FontFamily(Font(R.font.roboto_black)),
-                            fontWeight = FontWeight(600),
-                            fontSize = 24.sp
-                        )
+                            .align(Alignment.Start),
+                        color = MaterialTheme.colorScheme.tertiary,
+                        fontFamily = FontFamily(Font(R.font.roboto_black)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 24.sp
+                    )
 
-                        // Last Name
-                        Text(
-                            text = lastName ?: "Last Name",
-                            modifier = Modifier
-                                .align(Alignment.Start),
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontFamily = FontFamily(Font(R.font.roboto_black)),
-                            fontWeight = FontWeight(600),
-                            fontSize = 24.sp
-                        )
-
-                    }
-
-                    Row(
+                    // Last Name
+                    Text(
+                        text = lastName ?: "Last Name",
                         modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalArrangement = Arrangement.End, // Align the image to the end (right side)
-                        verticalAlignment = Alignment.Bottom // Align the image to the bottom
-                    ) {
-                        // Logo (Replace with your logo)
-                        Image(
-                            painter = painterResource(id = R.drawable.pattern_bg), // Replace with your logo resource
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .alpha(0.5f),
-                            alignment = Alignment.BottomEnd
-                        )
-                    }
+                            .align(Alignment.Start),
+                        color = MaterialTheme.colorScheme.tertiary,
+                        fontFamily = FontFamily(Font(R.font.roboto_black)),
+                        fontWeight = FontWeight(600),
+                        fontSize = 24.sp
+                    )
+
                 }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalArrangement = Arrangement.End, // Align the image to the end (right side)
+                    verticalAlignment = Alignment.Bottom // Align the image to the bottom
+                ) {
+                    // Logo (Replace with your logo)
+                    Image(
+                        painter = painterResource(id = R.drawable.pattern_bg), // Replace with your logo resource
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .alpha(0.5f),
+                        alignment = Alignment.BottomEnd
+                    )
+                }
+            }
 
         }
     }
